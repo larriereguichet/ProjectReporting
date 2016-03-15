@@ -2,13 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Project;
 use AppBundle\Entity\WorkedDay;
 use AppBundle\Form\Type\WorkedDayCollectionType;
-use DateTime;
-use League\Period\Period;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Form\FormInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 
 class ReportingController extends Controller
@@ -20,77 +20,80 @@ class ReportingController extends Controller
      */
     public function reportingAction(Request $request)
     {
-        $now = new DateTime();
-
-        if (!$request->get('month')) {
-            $month = (int)$now->format('m');
-        } else {
-            $month = (int)$request->get('month');
-        }
-        if (!$request->get('year')) {
-            $year = (int)$now->format('Y');
-        } else {
-            $year = (int)$request->get('year');
-        }
-        var_dump($year);
-        var_dump($month);
-        $period = Period::createFromMonth($year, $month);
-        $previousPeriod = Period::createFromMonth($year, $month - 1)->getStartDate();
-        $nextPeriod = Period::createFromMonth($year, $month + 1);
-
-        $projects = $this
-            ->get('lag.project_repository')
-            ->findAll();
-
-        $days = [
-        ];
-
-        /** @var Project $project */
-        foreach ($projects as $project) {
-
-            foreach ($project->getProfiles() as $profile) {
-
-
-                /** @var DateTime $day */
-                foreach ($period->getDatePeriod('1 DAY') as $day) {
-
-                    $workedDay = new WorkedDay();
-                    $workedDay->setDate($day);
-                    $workedDay->setProfile($profile);
-
-                    $profile->addWorkedDay($workedDay);
-
-                    $days[] = $workedDay;
-
-
-
-                    //$forms[$profile->getId()] [$day->format('d')] ;
-                }
-
-            }
-
-
-        }
-
+        $helper = $this->get('lag.reporting.view_helper');
+        $helper->handleRequest($request);
 
         $form = $this->createForm(WorkedDayCollectionType::class, [
-            'days' => $days
+            'days' => $helper->getDays()
         ]);
+        $forms = [];
 
-        var_dump($form->get('days'));
-        die;
-
+        /** @var FormInterface $child */
         foreach ($form->get('days') as $child) {
+            /** @var WorkedDay $workedDay */
+            $workedDay = $child->getData();
+
+            // sort by george profile first
+            $profileId = $workedDay
+                ->getProfile()
+                ->getId();
+
+            // then sort by day (d: '01' for example)
+            $day = $workedDay
+                ->getDate()
+                ->format('d');
+
+            $forms[$profileId][$day] = $child->createView();
+        }
+        return [
+            'period' => $helper->getPeriod(),
+            'previousPeriod' => $helper->getPreviousPeriod(),
+            'nextPrevious' => $helper->getNextPeriod(),
+            'projects' => $helper->getProjects(),
+            'form' => $form->createView(),
+            'forms' => $forms
+        ];
+    }
+
+    /**
+     * @Method({"POST"})
+     * @param Request $request
+     * @return JsonResponse
+     */
+    public function saveReportingAjaxAction(Request $request)
+    {
+        $helper = $this->get('lag.reporting.view_helper');
+        $helper->handleRequest($request);
+
+        $form = $this->createForm(WorkedDayCollectionType::class, [
+            'days' => $helper->getDays()
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            $days = $form->getData()['days'];
+            $workedDayRepository = $this->get('lag.worked_day_repository');
+
+            foreach ($days as $day) {
+                $workedDayRepository->save($day);
+            }
+            $response = new JsonResponse();
+        } else {
+            $errors = [];
+
+            foreach ($form->getErrors() as $error) {
+                $errors[] = [
+                    'message' => $error->getMessage(),
+                    'cause' => $error->getCause(),
+                    'origin' => $error->getOrigin()
+                ];
+            }
+            var_dump($errors);
+            $response = new JsonResponse([
+                'errors' => $errors
+            ], 500);
         }
 
-
-
-        return [
-            'period' => $period,
-            'previousPeriod' => $previousPeriod,
-            'nextPrevious' => $nextPeriod,
-            'projects' => $projects,
-            'forms' => $forms->createView()
-        ];
+        return $response;
     }
 }

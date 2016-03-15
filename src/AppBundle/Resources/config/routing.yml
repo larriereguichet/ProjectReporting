@@ -1,3 +1,7 @@
 app_reporting:
     path: /
     defaults: {_controller: AppBundle:Reporting:reporting}
+
+app_save_reporting:
+    path: /save
+    defaults: {_controller: AppBundle:Reporting:saveReportingAjax}

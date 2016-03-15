@@ -29,7 +29,7 @@ class WorkedDay
     /**
      * @ORM\Column(name="duration", type="float", precision=2)
      */
-    protected $duration;
+    protected $duration = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity="AppBundle\Entity\GeorgeProfile", inversedBy="workedDays")
@@ -91,7 +91,7 @@ class WorkedDay
     }
 
     /**
-     * @return mixed
+     * @return GeorgeProfile
      */
     public function getProfile()
     {
@@ -99,10 +99,10 @@ class WorkedDay
     }
 
     /**
-     * @param mixed $profile
+     * @param GeorgeProfile $profile
      * @return WorkedDay
      */
-    public function setProfile($profile)
+    public function setProfile(GeorgeProfile $profile)
     {
         $this->profile = $profile;
         return $this;

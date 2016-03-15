@@ -12,13 +12,13 @@ services:
         arguments:
             - AppBundle\Entity\Project
 
-    lag.worked_day:
+    lag.worked_day_repository:
         class: AppBundle\Repository\WorkedDaysRepository
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\WorkedDay
 
-    lag.customer:
+    lag.customer_repository:
         class: AppBundle\Repository\CustomerRepository
         factory: ["@doctrine", getRepository]
         arguments:
@@ -35,3 +35,9 @@ services:
         factory: ["@doctrine", getRepository]
         arguments:
             - AppBundle\Entity\GeorgeProfile
+
+    lag.reporting.view_helper:
+        class: AppBundle\View\Helper\ReportingHelper
+        arguments:
+            - '@lag.project_repository'
+            - '@lag.worked_day_repository'

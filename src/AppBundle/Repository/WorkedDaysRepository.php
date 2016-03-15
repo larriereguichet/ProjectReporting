@@ -2,11 +2,12 @@
 
 namespace AppBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use LAG\DoctrineRepositoryBundle\Repository\DoctrineRepository;
 
 /**
  * WorkedDaysRepository
  */
-class WorkedDaysRepository extends EntityRepository
+class WorkedDaysRepository extends DoctrineRepository
 {
+
 }
