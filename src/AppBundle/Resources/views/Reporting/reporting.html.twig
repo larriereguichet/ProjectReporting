@@ -1,0 +1,53 @@
+<a href="{{ path('app_reporting', {year: previousPeriod.format('Y'), month: previousPeriod.format('m')}) }}">précédent</a>
+
+
+<style scoped>
+    td input[type=text] {
+        width: 50px;
+    }
+</style>
+
+<table>
+    <thead></thead>
+    <tbody>
+
+    <tr>
+        <td></td>
+
+        {% for day in period.getDatePeriod('1 DAY') %}
+            <td>
+                {{ day.format('D') }}<br/>
+                {{ day.format('d') }}
+
+            </td>
+        {% endfor %}
+    </tr>
+
+
+    <tr>
+        {% for project in projects %}
+
+            {% for profile in project.profiles %}
+                <td>
+                    {{ profile.name }} ({{ project.name }})
+                </td>
+                {% for day in period.getDatePeriod('1 DAY') %}
+                    <td>
+                        <input type="text" name="" value=""/>
+
+                    </td>
+                {% endfor %}
+            {% endfor %}
+        {% endfor %}
+    </tr>
+    </tbody>
+
+</table>
+
+form ?
+{% for children in forms.days %}
+lol
+    {{ form_widget(children) }}
+
+    <br/>
+{% endfor %}

@@ -1,0 +1,3 @@
+app_reporting:
+    path: /
+    defaults: {_controller: AppBundle:Reporting:reporting}

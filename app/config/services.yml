@@ -1,0 +1,37 @@
+parameters:
+
+services:
+    twig.extension.intl:
+       class: Twig_Extensions_Extension_Intl
+       tags:
+           - { name: twig.extension }
+
+    lag.project_repository:
+        class: AppBundle\Repository\ProjectRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\Project
+
+    lag.worked_day:
+        class: AppBundle\Repository\WorkedDaysRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\WorkedDay
+
+    lag.customer:
+        class: AppBundle\Repository\CustomerRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\Customer
+
+    lag.george_repository:
+        class: AppBundle\Repository\GeorgeRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\George
+
+    lag.george_profile_repository:
+        class: AppBundle\Repository\GeorgeProfileRepository
+        factory: ["@doctrine", getRepository]
+        arguments:
+            - AppBundle\Entity\GeorgeProfile
