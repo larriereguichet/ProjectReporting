@@ -1,9 +1,7 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block content %}
-
     <a href="{{ path('app_reporting', {year: previousPeriod.format('Y'), month: previousPeriod.format('m')}) }}">précédent</a>
-
 
     <style scoped>
         td input[type=text] {
@@ -46,7 +44,6 @@
     </table>
         {{ form_widget(form._token) }}
     </form>
-
 {% endblock %}
 
 {% block javascripts %}

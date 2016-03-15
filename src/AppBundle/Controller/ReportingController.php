@@ -45,6 +45,7 @@ class ReportingController extends Controller
 
             $forms[$profileId][$day] = $child->createView();
         }
+
         return [
             'period' => $helper->getPeriod(),
             'previousPeriod' => $helper->getPreviousPeriod(),
@@ -71,9 +72,11 @@ class ReportingController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
+            // get worked days from form
             $days = $form->getData()['days'];
             $workedDayRepository = $this->get('lag.worked_day_repository');
 
+            // save each worked day
             foreach ($days as $day) {
                 $workedDayRepository->save($day);
             }
@@ -88,9 +91,8 @@ class ReportingController extends Controller
                     'origin' => $error->getOrigin()
                 ];
             }
-            var_dump($errors);
             $response = new JsonResponse([
-                'errors' => $errors
+                'errors' => (string)$form->getErrors(true, false)
             ], 500);
         }
 
