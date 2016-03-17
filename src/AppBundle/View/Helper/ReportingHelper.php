@@ -6,10 +6,12 @@ use AppBundle\Entity\Project;
 use AppBundle\Entity\WorkedDay;
 use AppBundle\Repository\ProjectRepository;
 use AppBundle\Repository\WorkedDaysRepository;
+use DateInterval;
 use DateTime;
 use Doctrine\Common\Collections\Collection;
 use League\Period\Period;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\RouterInterface;
 
 class ReportingHelper
 {
@@ -29,16 +31,6 @@ class ReportingHelper
     protected $period;
 
     /**
-     * @var Period
-     */
-    protected $previousPeriod;
-
-    /**
-     * @var Period
-     */
-    protected $nextPeriod;
-
-    /**
      * @var int
      */
     protected $days = 0;
@@ -47,17 +39,26 @@ class ReportingHelper
      * @var Project[]|Collection
      */
     protected $projects;
+    /**
+     * @var RouterInterface
+     */
+    private $router;
 
     /**
      * ReportingHelper constructor.
      *
      * @param ProjectRepository $projectRepository
      * @param WorkedDaysRepository $workedDaysRepository
+     * @param RouterInterface $router
      */
-    public function __construct(ProjectRepository $projectRepository, WorkedDaysRepository $workedDaysRepository)
-    {
+    public function __construct(
+        ProjectRepository $projectRepository,
+        WorkedDaysRepository $workedDaysRepository,
+        RouterInterface $router
+    ) {
         $this->projectRepository = $projectRepository;
         $this->workedDaysRepository = $workedDaysRepository;
+        $this->router = $router;
     }
 
     /**
@@ -78,10 +79,14 @@ class ReportingHelper
         } else {
             $year = (int)$request->get('year');
         }
-        $this->period = Period::createFromMonth($year, $month);
-        $this->previousPeriod = Period::createFromMonth($year, $month - 1)->getStartDate();
-        $this->nextPeriod = Period::createFromMonth($year, $month + 1);
+        $dateFromRequest = new DateTime();
+        $dateFromRequest->setDate($year, $month, 1);
 
+        if ($dateFromRequest > $now) {
+            $year = (int)$now->format('Y');
+            $month = (int)$now->format('m');
+        }
+        $this->period = Period::createFromMonth($year, $month);
         $this->projects = $this
             ->projectRepository
             ->findAll();
@@ -135,22 +140,6 @@ class ReportingHelper
     }
 
     /**
-     * @return Period
-     */
-    public function getPreviousPeriod()
-    {
-        return $this->previousPeriod;
-    }
-
-    /**
-     * @return Period
-     */
-    public function getNextPeriod()
-    {
-        return $this->nextPeriod;
-    }
-
-    /**
      * @return int
      */
     public function getDays()
@@ -164,5 +153,45 @@ class ReportingHelper
     public function getProjects()
     {
         return $this->projects;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousLink()
+    {
+        $date = $this
+            ->period
+            ->getStartDate()
+            ->sub(DateInterval::createFromDateString('1 month'));
+
+        return $this
+            ->router
+            ->generate('app_reporting', [
+                'year' => $date->format('Y'),
+                'month' => $date->format('m')
+            ]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getNextLink()
+    {
+        $date = $this
+            ->period
+            ->getStartDate()
+            ->add(DateInterval::createFromDateString('1 month'));
+
+        if ($date > new DateTime()) {
+            return null;
+        }
+
+        return $this
+            ->router
+            ->generate('app_reporting', [
+                'year' => $date->format('Y'),
+                'month' => $date->format('m')
+            ]);
     }
 }

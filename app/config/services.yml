@@ -41,3 +41,4 @@ services:
         arguments:
             - '@lag.project_repository'
             - '@lag.worked_day_repository'
+            - '@router'

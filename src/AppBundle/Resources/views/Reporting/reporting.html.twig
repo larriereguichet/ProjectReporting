@@ -1,7 +1,11 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block content %}
-    <a href="{{ path('app_reporting', {year: previousPeriod.format('Y'), month: previousPeriod.format('m')}) }}">précédent</a>
+    <a href="{{ previousLink }}">précédent</a>
+
+    {% if nextLink %}
+        <a href="{{ nextLink }}">suivant</a>
+    {% endif %}
 
     <style scoped>
         td input[type=text] {
@@ -10,38 +14,37 @@
     </style>
 
     <form id="reporting-form" action="{{ path('app_save_reporting') }}" method="post">
-    <table class="table">
-        <thead></thead>
-        <tbody>
+        <table class="table">
+            <thead></thead>
+            <tbody>
+            <tr>
+                <td></td>
 
-        <tr>
-            <td></td>
-
-            {% for day in period.getDatePeriod('1 DAY') %}
-                <td>
-                    {{ day.format('D') }}<br/>
-                    {{ day.format('d') }}
-
-                </td>
-            {% endfor %}
-        </tr>
-        <tr>
-            {% for project in projects %}
-
-                {% for profile in project.profiles %}
+                {% for day in period.getDatePeriod('1 DAY') %}
                     <td>
-                        {{ profile.name }} ({{ project.name }})
+                        {{ day.format('D') }}<br/>
+                        {{ day.format('d') }}
+
                     </td>
-                    {% for day in period.getDatePeriod('1 DAY') %}
+                {% endfor %}
+            </tr>
+            <tr>
+                {% for project in projects %}
+
+                    {% for profile in project.profiles %}
                         <td>
-                            {{ form_widget(forms[profile.id][day.format('d')]) }}
+                            {{ profile.name }} ({{ project.name }})
                         </td>
+                        {% for day in period.getDatePeriod('1 DAY') %}
+                            <td>
+                                {{ form_widget(forms[profile.id][day.format('d')]) }}
+                            </td>
+                        {% endfor %}
                     {% endfor %}
                 {% endfor %}
-            {% endfor %}
-        </tr>
-        </tbody>
-    </table>
+            </tr>
+            </tbody>
+        </table>
         {{ form_widget(form._token) }}
     </form>
 {% endblock %}

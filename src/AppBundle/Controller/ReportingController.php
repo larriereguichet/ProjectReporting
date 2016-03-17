@@ -48,11 +48,11 @@ class ReportingController extends Controller
 
         return [
             'period' => $helper->getPeriod(),
-            'previousPeriod' => $helper->getPreviousPeriod(),
-            'nextPrevious' => $helper->getNextPeriod(),
             'projects' => $helper->getProjects(),
             'form' => $form->createView(),
-            'forms' => $forms
+            'forms' => $forms,
+            'previousLink' => $helper->getPreviousLink(),
+            'nextLink' => $helper->getNextLink(),
         ];
     }
 
