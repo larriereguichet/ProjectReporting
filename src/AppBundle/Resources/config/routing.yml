@@ -5,3 +5,7 @@ app_reporting:
 app_save_reporting:
     path: /save
     defaults: {_controller: AppBundle:Reporting:saveReportingAjax}
+
+app_add_profile:
+    path: /add-profile
+    defaults: {_controller: AppBundle:Reporting:addProfile}

@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Entity\WorkedDay;
+use AppBundle\Form\Type\AddGeorgeProfileType;
 use AppBundle\Form\Type\WorkedDayCollectionType;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Method;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
@@ -27,6 +28,13 @@ class ReportingController extends Controller
             'days' => $helper->getDays()
         ]);
         $forms = [];
+
+        $projects = $this
+            ->get('lag.project_repository')
+            ->findAll();
+        $profilesForms = $this->createForm(AddGeorgeProfileType::class, null, [
+            'projects' => $projects
+        ]);
 
         /** @var FormInterface $child */
         foreach ($form->get('days') as $child) {
@@ -53,6 +61,7 @@ class ReportingController extends Controller
             'forms' => $forms,
             'previousLink' => $helper->getPreviousLink(),
             'nextLink' => $helper->getNextLink(),
+            'profilesForms' => $profilesForms->createView()
         ];
     }
 
@@ -97,5 +106,10 @@ class ReportingController extends Controller
         }
 
         return $response;
+    }
+
+    public function addProfileAction()
+    {
+
     }
 }

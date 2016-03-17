@@ -7,9 +7,14 @@
         <a href="{{ nextLink }}">suivant</a>
     {% endif %}
 
+    <form action="" method="post">
+        {{ form_errors(profilesForms) }}
+        {{ form_widget(profilesForms) }}
+    </form>
+
     <style scoped>
         td input[type=text] {
-            width: 100%;
+            width: 20px;
         }
     </style>
 

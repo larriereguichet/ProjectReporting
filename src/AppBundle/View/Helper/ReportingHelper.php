@@ -2,6 +2,7 @@
 
 namespace AppBundle\View\Helper;
 
+use AppBundle\Entity\George;
 use AppBundle\Entity\Project;
 use AppBundle\Entity\WorkedDay;
 use AppBundle\Repository\ProjectRepository;
@@ -12,6 +13,7 @@ use Doctrine\Common\Collections\Collection;
 use League\Period\Period;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 
 class ReportingHelper
 {
@@ -39,10 +41,16 @@ class ReportingHelper
      * @var Project[]|Collection
      */
     protected $projects;
+
     /**
      * @var RouterInterface
      */
     private $router;
+
+    /**
+     * @var TokenStorageInterface
+     */
+    private $tokenStorage;
 
     /**
      * ReportingHelper constructor.
@@ -50,15 +58,18 @@ class ReportingHelper
      * @param ProjectRepository $projectRepository
      * @param WorkedDaysRepository $workedDaysRepository
      * @param RouterInterface $router
+     * @param TokenStorageInterface $tokenStorage
      */
     public function __construct(
         ProjectRepository $projectRepository,
         WorkedDaysRepository $workedDaysRepository,
-        RouterInterface $router
+        RouterInterface $router,
+        TokenStorageInterface $tokenStorage
     ) {
         $this->projectRepository = $projectRepository;
         $this->workedDaysRepository = $workedDaysRepository;
         $this->router = $router;
+        $this->tokenStorage = $tokenStorage;
     }
 
     /**
@@ -87,10 +98,10 @@ class ReportingHelper
             $month = (int)$now->format('m');
         }
         $this->period = Period::createFromMonth($year, $month);
+
         $this->projects = $this
             ->projectRepository
-            ->findAll();
-
+            ->findForGeorge($this->getUser());
         $days = [];
 
         /** @var Project $project */
@@ -193,5 +204,16 @@ class ReportingHelper
                 'year' => $date->format('Y'),
                 'month' => $date->format('m')
             ]);
+    }
+
+    /**
+     * @return George
+     */
+    protected function getUser()
+    {
+        return $this
+            ->tokenStorage
+            ->getToken()
+            ->getUser();
     }
 }
