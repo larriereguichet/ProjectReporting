@@ -1,23 +1,40 @@
 <?php
 
-namespace BlueBear\CmsBundle\Guard\UserProvider;
+namespace AppBundle\Guard\UserProvider;
 
-use BlueBear\CmsBundle\Repository\UserRepository;
+use AppBundle\Entity\George;
+use AppBundle\Repository\GeorgeRepository;
 use Symfony\Component\Security\Core\Exception\UnsupportedUserException;
 use Symfony\Component\Security\Core\Exception\UsernameNotFoundException;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Security\Core\User\UserProviderInterface;
+use Symfony\Component\Validator\Constraints\Email;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class UserProvider implements UserProviderInterface
 {
     /**
-     * @var UserRepository
+     * @var GeorgeRepository
      */
-    private $userRepository;
+    protected $georgeRepository;
 
-    public function __construct(UserRepository $userRepository)
-    {
-        $this->userRepository = $userRepository;
+    /**
+     * @var ValidatorInterface
+     */
+    protected $validator;
+
+    /**
+     * UserProvider constructor.
+     *
+     * @param GeorgeRepository $georgeRepository
+     * @param ValidatorInterface $validator
+     */
+    public function __construct(
+        GeorgeRepository $georgeRepository,
+        ValidatorInterface $validator
+    ) {
+        $this->georgeRepository = $georgeRepository;
+        $this->validator = $validator;
     }
 
     /**
@@ -34,17 +51,23 @@ class UserProvider implements UserProviderInterface
      */
     public function loadUserByUsername($username)
     {
-        $user = $this
-            ->userRepository
+        $property = 'username';
+
+        if ($this->isEmail($username)) {
+            $property = 'email';
+        }
+
+        $george = $this
+            ->georgeRepository
             ->findOneBy([
-                'username' => $username
+                $property => $username
             ]);
 
-        if (!$user) {
+        if (!$george) {
             throw new UsernameNotFoundException();
         }
 
-        return $user;
+        return $george;
     }
 
     /**
@@ -75,6 +98,17 @@ class UserProvider implements UserProviderInterface
      */
     public function supportsClass($class)
     {
-        return $class == 'BlueBear\CmsBundle\Entity\User';
+        return $class == George::class;
+    }
+
+    protected function isEmail($value)
+    {
+        $violations = $this
+            ->validator
+            ->validate($value, [
+                new Email()
+            ]);
+
+        return count($violations) == 0;
     }
 }

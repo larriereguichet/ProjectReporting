@@ -6,12 +6,25 @@ services:
        tags:
            - { name: twig.extension }
 
+    gedmo.listener.timestampable:
+        class: Gedmo\Timestampable\TimestampableListener
+        tags:
+            - { name: doctrine.event_subscriber, connection: default }
+        calls:
+            - [setAnnotationReader, ['@annotation_reader']]
+
     lag.guard.password_authenticator:
        class: AppBundle\Guard\Authenticator\PasswordAuthenticator
        arguments:
            - '@router'
+           - '@form.factory'
            - '@security.encoder_factory'
 
+    lag_user_provider:
+       class: AppBundle\Guard\UserProvider\UserProvider
+       arguments:
+       - '@lag.george_repository'
+       - '@validator'
 
     lag.project_repository:
         class: AppBundle\Repository\ProjectRepository

@@ -1,3 +1,15 @@
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
     prefix:   /reporting
+
+# Guard
+login:
+    path: /login
+    defaults: {_controller: AppBundle:Guard:login}
+
+login_check:
+    path: /login_check
+    defaults: {_controller: AppBundle:Guard:loginCheck}
+
+logout:
+    path: /logout

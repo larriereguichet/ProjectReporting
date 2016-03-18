@@ -2,6 +2,7 @@
 
 namespace AppBundle\Guard\Authenticator;
 
+use AppBundle\Form\Type\LoginType;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -28,14 +29,24 @@ class PasswordAuthenticator extends AbstractGuardAuthenticator
     protected $encoderFactory;
 
     /**
+     * @var FormFactoryInterface
+     */
+    protected $formFactory;
+
+    /**
      * TokenAuthenticator constructor.
      *
      * @param RouterInterface $router
+     * @param FormFactoryInterface $formFactory
      * @param EncoderFactoryInterface $encoderFactory
      */
-    public function __construct(RouterInterface $router, EncoderFactoryInterface $encoderFactory)
-    {
+    public function __construct(
+        RouterInterface $router,
+        FormFactoryInterface $formFactory,
+        EncoderFactoryInterface $encoderFactory
+    ) {
         $this->router = $router;
+        $this->formFactory = $formFactory;
         $this->encoderFactory = $encoderFactory;
     }
 
@@ -92,8 +103,6 @@ class PasswordAuthenticator extends AbstractGuardAuthenticator
         $form = $this->formFactory->create(LoginType::class);
         $form->handleRequest($request);
 
-        //var_dump($request->getSession()->get)
-
         if (!$form->isValid()) {
             throw new AuthenticationException();
         }
@@ -123,7 +132,6 @@ class PasswordAuthenticator extends AbstractGuardAuthenticator
      */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
-        die('lol');
         return $userProvider->loadUserByUsername($credentials['username']);
     }
 
@@ -187,7 +195,7 @@ class PasswordAuthenticator extends AbstractGuardAuthenticator
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
-        return new RedirectResponse($this->router->generate('bluebear.cms.dashboard'));
+        return new RedirectResponse($this->router->generate('app_reporting'));
     }
 
     /**
