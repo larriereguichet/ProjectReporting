@@ -15,7 +15,7 @@ class ProjectRepository extends EntityRepository
      * @param George $george
      * @return Project[]
      */
-    public function findForGeorge($george)
+    public function findForGeorge(George $george)
     {
         return $this
             ->createQueryBuilder('project')
@@ -24,7 +24,7 @@ class ProjectRepository extends EntityRepository
             ->innerJoin('profiles.george', 'george')
             ->innerJoin('profiles.workedDays', 'workedDays')
             ->where('george.id = :george_id')
-            ->setParameter('george_id', 1)
+            ->setParameter('george_id', $george->getId())
             ->getQuery()
             ->getResult();
     }

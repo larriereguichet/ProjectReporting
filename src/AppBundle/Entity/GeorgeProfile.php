@@ -49,7 +49,7 @@ class GeorgeProfile
     protected $numberOfDays;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\WorkedDay", mappedBy="profile")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\WorkedDay", mappedBy="profile", fetch="EAGER")
      */
     protected $workedDays;
 
@@ -112,6 +112,7 @@ class GeorgeProfile
     public function setGeorge($george)
     {
         $this->george = $george;
+
         return $this;
     }
 

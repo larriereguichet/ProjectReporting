@@ -32,8 +32,11 @@ class ReportingController extends Controller
         $projects = $this
             ->get('lag.project_repository')
             ->findAll();
-        $profilesForms = $this->createForm(AddGeorgeProfileType::class, null, [
-            'projects' => $projects
+        $profilesForms = $this->createForm(AddGeorgeProfileType::class, [
+            'year' => $helper->getYear(),
+            'month' => $helper->getMonth()
+        ], [
+            'projects' => $projects,
         ]);
 
         /** @var FormInterface $child */
@@ -119,10 +122,11 @@ class ReportingController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            var_dump($form->getData());
-        }
+            $this->get('lag.form.add_george_profile_handler')->handle($form, $this->getUser());
 
-        die('lol');
+            $this->addFlash('info', 'ok');
+        }
+        return $this->redirectToRoute('app_reporting');
     }
 
     public function removeProfileAction()

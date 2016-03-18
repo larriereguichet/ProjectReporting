@@ -2,11 +2,11 @@
 
 namespace AppBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use LAG\DoctrineRepositoryBundle\Repository\DoctrineRepository;
 
 /**
  * GeorgeProfileRepository
  */
-class GeorgeProfileRepository extends EntityRepository
+class GeorgeProfileRepository extends DoctrineRepository
 {
 }

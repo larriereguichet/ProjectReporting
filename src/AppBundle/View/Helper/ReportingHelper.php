@@ -33,9 +33,9 @@ class ReportingHelper
     protected $period;
 
     /**
-     * @var int
+     * @var WorkedDay[]
      */
-    protected $days = 0;
+    protected $days;
 
     /**
      * @var Project[]|Collection
@@ -45,12 +45,12 @@ class ReportingHelper
     /**
      * @var RouterInterface
      */
-    private $router;
+    protected $router;
 
     /**
      * @var TokenStorageInterface
      */
-    private $tokenStorage;
+    protected $tokenStorage;
 
     /**
      * ReportingHelper constructor.
@@ -81,21 +81,21 @@ class ReportingHelper
         $now = new DateTime();
 
         if (!$request->get('month')) {
-            $month = (int)$now->format('m');
+            $month = (int) $now->format('m');
         } else {
-            $month = (int)$request->get('month');
+            $month = (int) $request->get('month');
         }
         if (!$request->get('year')) {
-            $year = (int)$now->format('Y');
+            $year = (int) $now->format('Y');
         } else {
-            $year = (int)$request->get('year');
+            $year = (int) $request->get('year');
         }
         $dateFromRequest = new DateTime();
         $dateFromRequest->setDate($year, $month, 1);
 
         if ($dateFromRequest > $now) {
-            $year = (int)$now->format('Y');
-            $month = (int)$now->format('m');
+            $year = (int) $now->format('Y');
+            $month = (int) $now->format('m');
         }
         $this->period = Period::createFromMonth($year, $month);
 
@@ -125,12 +125,14 @@ class ReportingHelper
                     if (array_key_exists($day->getTimestamp(), $workedDays)) {
                         $workedDay = $workedDays[$day->getTimestamp()];
                     } else {
+                        // fill missing working days in database
                         $workedDay = new WorkedDay();
                         $workedDay->setDate($day);
                         $workedDay->setProfile($profile);
+
+                        // bind it to the profile
                         $profile->addWorkedDay($workedDay);
 
-                        // save new worked day
                         $this
                             ->workedDaysRepository
                             ->save($workedDay);
@@ -151,7 +153,7 @@ class ReportingHelper
     }
 
     /**
-     * @return int
+     * @return WorkedDay[]
      */
     public function getDays()
     {
@@ -204,6 +206,28 @@ class ReportingHelper
                 'year' => $date->format('Y'),
                 'month' => $date->format('m')
             ]);
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return (int) $this
+            ->period
+            ->getStartDate()
+            ->format('Y');
+    }
+
+    /**
+     * @return int
+     */
+    public function getMonth()
+    {
+        return (int) $this
+            ->period
+            ->getStartDate()
+            ->format('m');
     }
 
     /**

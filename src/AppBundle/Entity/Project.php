@@ -48,7 +48,7 @@ class Project
     protected $updatedAt;
 
     /**
-     * @ORM\OneToMany(targetEntity="AppBundle\Entity\GeorgeProfile", mappedBy="project")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\GeorgeProfile", mappedBy="project", fetch="EAGER")
      */
     protected $profiles;
 

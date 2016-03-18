@@ -14,8 +14,9 @@ class AddGeorgeProfileType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('georgeId', HiddenType::class)
-            ->add('profile', ChoiceType::class, [
+            ->add('month', HiddenType::class)
+            ->add('year', HiddenType::class)
+            ->add('profileId', ChoiceType::class, [
                 'choices' => $this->transformProjectsToChoices($options['projects'])
             ])
         ;
