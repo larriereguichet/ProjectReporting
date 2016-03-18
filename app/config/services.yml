@@ -6,6 +6,13 @@ services:
        tags:
            - { name: twig.extension }
 
+    lag.guard.password_authenticator:
+       class: AppBundle\Guard\Authenticator\PasswordAuthenticator
+       arguments:
+           - '@router'
+           - '@security.encoder_factory'
+
+
     lag.project_repository:
         class: AppBundle\Repository\ProjectRepository
         factory: ["@doctrine", getRepository]

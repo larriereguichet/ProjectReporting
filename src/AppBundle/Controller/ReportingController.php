@@ -108,7 +108,24 @@ class ReportingController extends Controller
         return $response;
     }
 
-    public function addProfileAction()
+    public function addProfileAction(Request $request)
+    {
+        $projects = $this
+            ->get('lag.project_repository')
+            ->findAll();
+        $form = $this->createForm(AddGeorgeProfileType::class, null, [
+            'projects' => $projects
+        ]);
+        $form->handleRequest($request);
+
+        if ($form->isValid()) {
+            var_dump($form->getData());
+        }
+
+        die('lol');
+    }
+
+    public function removeProfileAction()
     {
 
     }

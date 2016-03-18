@@ -7,9 +7,11 @@
         <a href="{{ nextLink }}">suivant</a>
     {% endif %}
 
-    <form action="" method="post">
+    <form action="{{ path('app_add_profile') }}" method="post">
         {{ form_errors(profilesForms) }}
         {{ form_widget(profilesForms) }}
+
+        <input type="submit" value="Ajouter le profil" />
     </form>
 
     <style scoped>

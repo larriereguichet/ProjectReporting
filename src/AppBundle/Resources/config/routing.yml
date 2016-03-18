@@ -9,3 +9,19 @@ app_save_reporting:
 app_add_profile:
     path: /add-profile
     defaults: {_controller: AppBundle:Reporting:addProfile}
+
+app_remove_profile:
+    path: /remove-profile
+    defaults: {_controller: AppBundle:Reporting:removeProfile}
+
+# Guard
+login:
+    path: /login
+    defaults: {_controller: BlueBearCmsBundle:Guard:login}
+
+login_check:
+    path: /login_check
+    defaults: {_controller: BlueBearCmsBundle:Guard:loginCheck}
+
+logout:
+    path: /logout
