@@ -1,15 +1,19 @@
-app_reporting:
+app_homepage:
     path: /
+    defaults: {_controller: AppBundle:Reporting:homepage}
+
+app_reporting:
+    path: /reporting
     defaults: {_controller: AppBundle:Reporting:reporting}
 
 app_save_reporting:
-    path: /save
+    path: /reporting/save
     defaults: {_controller: AppBundle:Reporting:saveReportingAjax}
 
 app_add_profile:
-    path: /add-profile
+    path: /reporting/add-profile
     defaults: {_controller: AppBundle:Reporting:addProfile}
 
 app_remove_profile:
-    path: /remove-profile
+    path: /reporting/remove-profile
     defaults: {_controller: AppBundle:Reporting:removeProfile}

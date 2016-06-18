@@ -1,6 +1,11 @@
+lag_admin:
+    resource: .
+    prefix: /
+    type: extra
+
 app:
     resource: "@AppBundle/Resources/config/routing.yml"
-    prefix:   /reporting
+    prefix:   /
 
 # Guard
 login:

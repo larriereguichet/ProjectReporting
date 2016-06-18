@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "6bf0fd82554d8bdea6e17daf0896153b",
-    "content-hash": "a163ad5ec5823ee155ed1b901ce195d9",
+    "hash": "cfa30db6f783e7e4fdf4e3cdfd6475d8",
+    "content-hash": "a70d6b814f1c0122a30c32814fde04ee",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1615,17 +1615,17 @@
         },
         {
             "name": "lag/adminbundle",
-            "version": "v0.4",
+            "version": "dev-dev",
             "target-dir": "LAG/AdminBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larriereguichet/AdminBundle.git",
-                "reference": "01610a3239fa50598bb389ba3fdb1a4147da0f28"
+                "reference": "bc96aa0b2b910e0049159067eaf5d07d0bf440a0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/01610a3239fa50598bb389ba3fdb1a4147da0f28",
-                "reference": "01610a3239fa50598bb389ba3fdb1a4147da0f28",
+                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/bc96aa0b2b910e0049159067eaf5d07d0bf440a0",
+                "reference": "bc96aa0b2b910e0049159067eaf5d07d0bf440a0",
                 "shasum": ""
             },
             "require": {
@@ -1686,7 +1686,7 @@
                 "backoffice",
                 "generic"
             ],
-            "time": "2016-06-04 21:49:09"
+            "time": "2016-06-03 20:52:38"
         },
         {
             "name": "lag/array-utils",
@@ -3272,7 +3272,8 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lag/doctrine-repository": 20
+        "lag/doctrine-repository": 20,
+        "lag/adminbundle": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,

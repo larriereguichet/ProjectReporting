@@ -1,0 +1,39 @@
+lag_admin:
+    application:
+        title: LAG Report
+        bootstrap: true
+        routing:
+            url_pattern: /admin/{admin}/{action}
+            name_pattern: admin.{admin}.{action}
+
+    menus:
+        main:
+            items:
+                reporting:
+                    route: app_reporting
+                    text: "Saisie d'activité"
+                    icon: fa fa-clock-o
+                project:
+                    admin: project
+                    text: Projets
+                    icon: fa fa-cubes
+                profile:
+                    admin: profile
+                    text: Profiles
+                    icon: fa fa-users
+                logout:
+                    route: logout
+                    text: Déconnexion
+                    icon: fa fa-sign-out
+
+    admins:
+        project:
+            entity: AppBundle\Entity\Project
+            form: test
+            actions: ~
+        profile:
+            entity: AppBundle\Entity\GeorgeProfile
+            form: test
+knp_menu:
+    twig:
+        template: 'LAGAdminBundle:Menu:bootstrap_menu.html.twig'

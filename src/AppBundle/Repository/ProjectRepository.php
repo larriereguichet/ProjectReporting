@@ -4,12 +4,12 @@ namespace AppBundle\Repository;
 
 use AppBundle\Entity\George;
 use AppBundle\Entity\Project;
-use Doctrine\ORM\EntityRepository;
+use LAG\AdminBundle\Repository\DoctrineRepository;
 
 /**
  * ProjectRepository
  */
-class ProjectRepository extends EntityRepository
+class ProjectRepository extends DoctrineRepository
 {
     /**
      * @param George $george

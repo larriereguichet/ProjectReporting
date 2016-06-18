@@ -16,6 +16,15 @@ class ReportingController extends Controller
 {
     /**
      * @Template()
+     */
+    public function homepageAction()
+    {
+        return [];
+    }
+
+    /**
+     * @Template()
+     *
      * @param Request $request
      * @return array
      */
