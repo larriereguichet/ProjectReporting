@@ -10,6 +10,7 @@ use Sensio\Bundle\FrameworkExtraBundle\Configuration\Template;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
@@ -73,7 +74,9 @@ class ReportingController extends Controller
             'form' => $form->createView(),
             'forms' => $forms,
             'previousLink' => $helper->getPreviousLink(),
+            'previousDate' => $helper->getPreviousDate(),
             'nextLink' => $helper->getNextLink(),
+            'nextDate' => $helper->getNextDate(),
             'profilesForms' => $profilesForms->createView()
         ];
     }
@@ -121,6 +124,10 @@ class ReportingController extends Controller
         return $response;
     }
 
+    /**
+     * @param Request $request
+     * @return RedirectResponse
+     */
     public function addProfileAction(Request $request)
     {
         $projects = $this
@@ -132,7 +139,9 @@ class ReportingController extends Controller
         $form->handleRequest($request);
 
         if ($form->isValid()) {
-            $this->get('lag.form.add_george_profile_handler')->handle($form, $this->getUser());
+            $this
+                ->get('lag.form.add_george_profile_handler')
+                ->handle($form, $this->getUser());
 
             $this->addFlash('info', 'ok');
         }

@@ -43,14 +43,16 @@ class AddGeorgeProfileHandler
     public function handle(FormInterface $form, UserInterface $user)
     {
         $data = $form->getData();
-        $profileId = $data['profileId'];
         /** @var GeorgeProfile $profile */
         $profile = $this
             ->georgeProfileRepository
-            ->find($profileId);
+            ->find($data['profileId']);
 
+        // if the profile has already a george, it means that it has already been set
+        if (null !== $profile->getGeorge()) {
+            return;
+        }
         $profile->setGeorge($user);
-
         $this
             ->georgeProfileRepository
             ->save($profile);

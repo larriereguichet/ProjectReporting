@@ -17,7 +17,8 @@ class AddGeorgeProfileType extends AbstractType
             ->add('month', HiddenType::class)
             ->add('year', HiddenType::class)
             ->add('profileId', ChoiceType::class, [
-                'choices' => $this->transformProjectsToChoices($options['projects'])
+                'choices' => $this->transformProjectsToChoices($options['projects']),
+                'label' => 'Type de profil'
             ])
         ;
     }

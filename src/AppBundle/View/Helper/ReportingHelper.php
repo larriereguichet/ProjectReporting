@@ -282,4 +282,20 @@ class ReportingHelper
                 'month' => $this->nextDate->format('m'),
             ]);
     }
+
+    /**
+     * @return DateTime
+     */
+    public function getPreviousDate()
+    {
+        return $this->previousDate;
+    }
+
+    /**
+     * @return DateTime
+     */
+    public function getNextDate()
+    {
+        return $this->nextDate;
+    }
 }

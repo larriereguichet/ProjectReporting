@@ -2,26 +2,70 @@
 
 {% block content %}
 
+    {% set now = date() %}
+    {% set displayNextLink = (nextDate < now) %}
+
     <div id="reporting" class="panel panel-default">
         <div class="panel-heading">
-            <a href="{{ previousLink }}">
-                <i class="fa fa-back"></i></a>
-                {{ period.startDate | localizeddate('none', 'none', null, null, 'MMMM') | capitalize }}
+            <a href="{{ previousLink }}" class="left">
+                <i class="fa fa-arrow-circle-left"></i>
+                {{ previousDate | localizeddate('none', 'none', null, null, 'MMMM') | capitalize }}</a>
+
+            {{ period.startDate | localizeddate('none', 'none', null, null, 'MMMM') | capitalize }}
+
+            {% if displayNextLink %}
+                <a href="{{ nextLink }}" class="right">
+                    {{ nextDate | localizeddate('none', 'none', null, null, 'MMMM') | capitalize }}
+                    <i class="fa fa-arrow-circle-right"></i></a>
+            {% endif %}
         </div>
+        <div class="panel-body">
+            <a href="#" id="show-profile-form-link">Ajouter un profil <i class="fa fa-caret-down"></i></a>
+
+            <form action="{{ path('app_add_profile') }}" method="post" id="add-profile-form" class="hide">
+                {{ form_errors(profilesForms) }}
+                {{ form_widget(profilesForms) }}
+
+                <input type="submit" value="Ajouter le profil" />
+            </form>
+        </div>
+
+        <form id="reporting-form" action="{{ path('app_save_reporting') }}" method="post">
+            <table class="table table-condensed">
+                <thead></thead>
+                <tbody>
+                <tr>
+                    <td></td>
+
+                    {% for day in period.getDatePeriod('1 DAY') %}
+                        <td>
+                            {{ day.format('D') }}<br/>
+                            {{ day.format('d') }}
+
+                        </td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    {% for project in projects %}
+
+                        {% for profile in project.profiles %}
+                            <td>
+                                {{ profile.name }} ({{ project.name }})
+                            </td>
+                            {% for day in period.getDatePeriod('1 DAY') %}
+                                <td>
+                                    {{ form_widget(forms[profile.id][day.format('d')]) }}
+                                </td>
+                            {% endfor %}
+                        {% endfor %}
+                    {% endfor %}
+                </tr>
+                </tbody>
+            </table>
+            {{ form_widget(form._token) }}
+        </form>
     </div>
 
-
-
-    {% if nextLink %}
-        <a href="{{ nextLink }}">suivant</a>
-    {% endif %}
-
-    <form action="{{ path('app_add_profile') }}" method="post">
-        {{ form_errors(profilesForms) }}
-        {{ form_widget(profilesForms) }}
-
-        <input type="submit" value="Ajouter le profil" />
-    </form>
 
     <style>
         #page-wrapper {
@@ -36,48 +80,26 @@
             font-weight: bold;
             text-align: center;
         }
+        .right {
+            float: right;
+        }
+        .left {
+            float: left;
+        }
+        .hide {
+            display: none;
+        }
+        .show {
+            display: block;
+        }
     </style>
-
-    <form id="reporting-form" action="{{ path('app_save_reporting') }}" method="post">
-        <table class="table table-condensed">
-            <thead></thead>
-            <tbody>
-            <tr>
-                <td></td>
-
-                {% for day in period.getDatePeriod('1 DAY') %}
-                    <td>
-                        {{ day.format('D') }}<br/>
-                        {{ day.format('d') }}
-
-                    </td>
-                {% endfor %}
-            </tr>
-            <tr>
-                {% for project in projects %}
-
-                    {% for profile in project.profiles %}
-                        <td>
-                            {{ profile.name }} ({{ project.name }})
-                        </td>
-                        {% for day in period.getDatePeriod('1 DAY') %}
-                            <td>
-                                {{ form_widget(forms[profile.id][day.format('d')]) }}
-                            </td>
-                        {% endfor %}
-                    {% endfor %}
-                {% endfor %}
-            </tr>
-            </tbody>
-        </table>
-        {{ form_widget(form._token) }}
-    </form>
 {% endblock %}
 
 {% block javascripts %}
     <script>
         $(document).on('ready', function () {
             var reportingForm = $('#reporting-form');
+            var addProfileForm = $('#add-profile-form');
 
             reportingForm.find('input').on('change', function (e) {
                 var input = $(this);
@@ -91,6 +113,20 @@
                         input.val(currentValue);
                     }
                 });
+            });
+
+            $('#show-profile-form-link').on('click', function () {
+
+                if (addProfileForm.hasClass('hide')) {
+                    addProfileForm.removeClass('hide');
+                    addProfileForm.addClass('show');
+                } else {
+                    addProfileForm.removeClass('show');
+                    addProfileForm.addClass('hide');
+                }
+
+
+                return false;
             });
 
         });
