@@ -1,7 +1,16 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block content %}
-    <a href="{{ previousLink }}">précédent</a>
+
+    <div id="reporting" class="panel panel-default">
+        <div class="panel-heading">
+            <a href="{{ previousLink }}">
+                <i class="fa fa-back"></i></a>
+                {{ period.startDate | localizeddate('none', 'none', null, null, 'MMMM') | capitalize }}
+        </div>
+    </div>
+
+
 
     {% if nextLink %}
         <a href="{{ nextLink }}">suivant</a>
@@ -19,12 +28,18 @@
             padding-top: 76px;
         }
         td input[type=text] {
-            width: 20px;
+            border-radius: 0;
+            padding: 0;
+            width: 30px;
+        }
+        #reporting .panel-heading {
+            font-weight: bold;
+            text-align: center;
         }
     </style>
 
     <form id="reporting-form" action="{{ path('app_save_reporting') }}" method="post">
-        <table class="table">
+        <table class="table table-condensed">
             <thead></thead>
             <tbody>
             <tr>

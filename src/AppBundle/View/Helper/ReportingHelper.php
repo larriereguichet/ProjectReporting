@@ -53,6 +53,26 @@ class ReportingHelper
     protected $tokenStorage;
 
     /**
+     * @var DateTime
+     */
+    protected $previousDate;
+
+    /**
+     * @var DateTime
+     */
+    protected $nextDate;
+
+    /**
+     * @var string
+     */
+    protected $previousLink;
+
+    /**
+     * @var string
+     */
+    protected $nextLink;
+
+    /**
      * ReportingHelper constructor.
      *
      * @param ProjectRepository $projectRepository
@@ -80,6 +100,7 @@ class ReportingHelper
     {
         $now = new DateTime();
 
+        // get date from request parameter
         if (!$request->get('month')) {
             $month = (int) $now->format('m');
         } else {
@@ -97,11 +118,99 @@ class ReportingHelper
             $year = (int) $now->format('Y');
             $month = (int) $now->format('m');
         }
+        // create period from year and month
         $this->period = Period::createFromMonth($year, $month);
 
+        // get projects for this user
         $this->projects = $this
             ->projectRepository
             ->findForGeorge($this->getUser());
+
+        // organize worked days for the view
+        $this->processWorkedDays();
+
+        // organize links for the view
+        $this->processLinks();
+    }
+
+    /**
+     * @return Period
+     */
+    public function getPeriod()
+    {
+        return $this->period;
+    }
+
+    /**
+     * @return WorkedDay[]
+     */
+    public function getDays()
+    {
+        return $this->days;
+    }
+
+    /**
+     * @return Project[]|Collection
+     */
+    public function getProjects()
+    {
+        return $this->projects;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPreviousLink()
+    {
+        return $this->previousLink;
+    }
+
+    /**
+     * @return string
+     */
+    public function getNextLink()
+    {
+        return $this->nextLink;
+    }
+
+    /**
+     * @return int
+     */
+    public function getYear()
+    {
+        return (int) $this
+            ->period
+            ->getStartDate()
+            ->format('Y');
+    }
+
+    /**
+     * @return int
+     */
+    public function getMonth()
+    {
+        return (int) $this
+            ->period
+            ->getStartDate()
+            ->format('m');
+    }
+
+    /**
+     * @return George
+     */
+    protected function getUser()
+    {
+        return $this
+            ->tokenStorage
+            ->getToken()
+            ->getUser();
+    }
+
+    /**
+     * Process worked days for the view.
+     */
+    protected function processWorkedDays()
+    {
         $days = [];
 
         /** @var Project $project */
@@ -145,99 +254,32 @@ class ReportingHelper
     }
 
     /**
-     * @return Period
+     * Define previous and next dates and links.
      */
-    public function getPeriod()
+    protected function processLinks()
     {
-        return $this->period;
-    }
-
-    /**
-     * @return WorkedDay[]
-     */
-    public function getDays()
-    {
-        return $this->days;
-    }
-
-    /**
-     * @return Project[]|Collection
-     */
-    public function getProjects()
-    {
-        return $this->projects;
-    }
-
-    /**
-     * @return string
-     */
-    public function getPreviousLink()
-    {
-        $date = $this
+        // previous date and link
+        $this->previousDate = $this
             ->period
             ->getStartDate()
             ->sub(DateInterval::createFromDateString('1 month'));
-
-        return $this
+        $this->previousLink = $this
             ->router
             ->generate('app_reporting', [
-                'year' => $date->format('Y'),
-                'month' => $date->format('m')
+                'year' => $this->previousDate->format('Y'),
+                'month' => $this->previousDate->format('m'),
             ]);
-    }
 
-    /**
-     * @return string
-     */
-    public function getNextLink()
-    {
-        $date = $this
+        // next date and link
+        $this->nextDate = $this
             ->period
             ->getStartDate()
             ->add(DateInterval::createFromDateString('1 month'));
-
-        if ($date > new DateTime()) {
-            return null;
-        }
-
-        return $this
+        $this->nextLink = $this
             ->router
             ->generate('app_reporting', [
-                'year' => $date->format('Y'),
-                'month' => $date->format('m')
+                'year' => $this->nextDate->format('Y'),
+                'month' => $this->nextDate->format('m'),
             ]);
-    }
-
-    /**
-     * @return int
-     */
-    public function getYear()
-    {
-        return (int) $this
-            ->period
-            ->getStartDate()
-            ->format('Y');
-    }
-
-    /**
-     * @return int
-     */
-    public function getMonth()
-    {
-        return (int) $this
-            ->period
-            ->getStartDate()
-            ->format('m');
-    }
-
-    /**
-     * @return George
-     */
-    protected function getUser()
-    {
-        return $this
-            ->tokenStorage
-            ->getToken()
-            ->getUser();
     }
 }
