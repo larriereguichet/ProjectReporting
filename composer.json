@@ -19,11 +19,11 @@
   "require": {
     "php": ">=5.5.9",
     "symfony/symfony": "3.0.*",
+    "symfony/swiftmailer-bundle": "^2.3",
+    "symfony/monolog-bundle": "^2.8",
     "doctrine/orm": "^2.5",
     "doctrine/doctrine-bundle": "^1.6",
     "doctrine/doctrine-cache-bundle": "^1.2",
-    "symfony/swiftmailer-bundle": "^2.3",
-    "symfony/monolog-bundle": "^2.8",
     "sensio/distribution-bundle": "^5.0",
     "sensio/framework-extra-bundle": "^3.0.2",
     "incenteev/composer-parameter-handler": "^2.0",
@@ -31,9 +31,7 @@
     "twig/extensions": "^1.3",
     "gedmo/doctrine-extensions": "^2.4",
     "lag/doctrine-repository": "dev-master",
-    "components/jquery": "^2.2",
-    "lag/adminbundle": "dev-dev",
-    "twbs/bootstrap": "^3.3"
+    "lag/adminbundle": "^0.4"
   },
   "require-dev": {
     "sensio/generator-bundle": "^3.0",
