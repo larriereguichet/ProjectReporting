@@ -26,7 +26,7 @@
                 {{ form_errors(profilesForms) }}
                 {{ form_widget(profilesForms) }}
 
-                <input type="submit" value="Ajouter le profil" />
+                <input type="submit" value="Ajouter le profil"/>
             </form>
         </div>
 
@@ -38,11 +38,10 @@
                     <td></td>
 
                     {% for day in period.getDatePeriod('1 DAY') %}
-                        <td>
-                            {{ day.format('D') }}<br/>
-                            {{ day.format('d') }}
-
-                        </td>
+                        <th class="header-days">
+                            {{ day | localizeddate('none', 'none', null, null, 'EEE') }}<br/>
+                            {{ day | localizeddate('none', 'none', null, null, 'dd') }}
+                        </th>
                     {% endfor %}
                 </tr>
                 <tr>
@@ -53,7 +52,7 @@
                                 {{ profile.name }} ({{ project.name }})
                             </td>
                             {% for day in period.getDatePeriod('1 DAY') %}
-                                <td>
+                                <td class="worked-days">
                                     {{ form_widget(forms[profile.id][day.format('d')]) }}
                                 </td>
                             {% endfor %}
@@ -66,29 +65,48 @@
         </form>
     </div>
 
-
     <style>
         #page-wrapper {
             padding-top: 76px;
         }
+
         td input[type=text] {
             border-radius: 0;
             padding: 0;
-            width: 30px;
+            text-align: center;
         }
+
         #reporting .panel-heading {
             font-weight: bold;
             text-align: center;
         }
+
+        #reporting table th,
+        #reporting table td {
+            min-width: 25px;
+            text-align: center;
+        }
+
+        #reporting table td:nth-child(1) {
+            width: 200px;
+        }
+
+        #reporting table .red-days {
+            background-color: #ffa19c;
+        }
+
         .right {
             float: right;
         }
+
         .left {
             float: left;
         }
+
         .hide {
             display: none;
         }
+
         .show {
             display: block;
         }
@@ -125,10 +143,33 @@
                     addProfileForm.addClass('hide');
                 }
 
-
                 return false;
             });
 
+            function validate() {
+                var table = reportingForm.find('table');
+                var workedDays = table.find('.worked-days');
+                var header = table.find('.header-days');
+                var redDays = [];
+
+                workedDays.find('input[type=text]').each(function (index, input) {
+                    var value = $(input).val();
+
+                    if (value > 1) {
+                        redDays.push(index);
+                    }
+                });
+
+                if (redDays.length > 0) {
+                    header.each(function (index, value) {
+                        if (redDays.indexOf(index) !== -1) {
+                            $(value).addClass('red-days');
+                        }
+                    });
+                }
+            }
+
+            validate();
         });
     </script>
 {% endblock %}
