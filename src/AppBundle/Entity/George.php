@@ -58,9 +58,9 @@ class George implements UserInterface
 
     /**
      * @var array
-     * @ORM\Column(name="roles", type="string", length=255)
+     * @ORM\Column(name="roles", type="json_array")
      */
-    protected $roles;
+    protected $roles = [];
 
     /**
      * @var string
@@ -182,11 +182,14 @@ class George implements UserInterface
      */
     public function getRoles()
     {
-        $rolesArray = explode(',', $this->roles);
         $roles = [];
 
-        foreach ($rolesArray as $role) {
-            $roles[] = new Role($role);
+        foreach ($this->roles as $role) {
+
+            if (!($role instanceof Role)) {
+                $role = new Role($role);
+            }
+            $roles[] = $role;
         }
 
         return $roles;
@@ -252,7 +255,7 @@ class George implements UserInterface
                 $roleStrings[] = $role;
             }
         }
-        $this->roles = implode(',', $roles);
+        $this->roles = $roleStrings;
 
         return $this;
     }
@@ -285,5 +288,32 @@ class George implements UserInterface
     {
         $this->username = $username;
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->username;
+    }
+
+    /**
+     * @return string
+     */
+    public function getRolesAsStringArray()
+    {
+        $array = [];
+
+        foreach ($this->roles as $role) {
+
+            if ($role instanceof Role) {
+                $array[] = $role->getRole();
+            } else {
+                $array[] = $role;
+            }
+        }
+
+        return $array;
     }
 }

@@ -159,4 +159,12 @@ class Project
         $this->profiles = $profiles;
         return $this;
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }

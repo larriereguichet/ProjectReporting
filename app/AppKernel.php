@@ -19,6 +19,7 @@ class AppKernel extends Kernel
             new LAG\AdminBundle\LAGAdminBundle(),
             new Knp\Bundle\MenuBundle\KnpMenuBundle(),
             new WhiteOctober\PagerfantaBundle\WhiteOctoberPagerfantaBundle(),
+            new Stfalcon\Bundle\TinymceBundle\StfalconTinymceBundle(),
             
             new AppBundle\AppBundle(),
         ];

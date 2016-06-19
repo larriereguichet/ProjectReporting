@@ -25,15 +25,22 @@ class AddUserCommand extends Command implements ContainerAwareInterface
         ;
     }
 
+    /**
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     * @return void
+     */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $george = new George();
         $george->setUsername($input->getArgument('username'));
         $george->setEmail($input->getArgument('email'));
         $george->setRoles([
-            'ROLE_USER'
+            'ROLE_USER',
+            'ROLE_ADMIN'
         ]);
         $george->setSalt(base_convert(sha1(uniqid(mt_rand(), true)), 16, 36));
+
         $encoded = $this
             ->container
             ->get('security.password_encoder')

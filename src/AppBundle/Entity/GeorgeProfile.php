@@ -197,4 +197,12 @@ class GeorgeProfile
             ->workedDays
             ->add($day);
     }
+
+    /**
+     * @return string
+     */
+    public function __toString()
+    {
+        return $this->name;
+    }
 }
