@@ -15,3 +15,6 @@
 /vendor/
 /web/bundles/
 /web/js
+etc/ansible/vars/vars.yml
+!etc/ansible/roles
+etc/ansible/roles/*

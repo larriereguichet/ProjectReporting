@@ -1,0 +1,122 @@
+---
+- hosts: all
+  become: yes
+
+  vars:
+    # Timezone
+    timezone: 'Europe/Paris'
+    # Site
+    http_port: 80
+    server_admin: afrezet@larriereguichet.fr
+    server_name: project-reporting.lag.ht
+
+  tasks:
+    - include_vars: ../vars/vars.yml
+
+    ###################
+    # User Management
+    ###################
+    - name: Create {{ user }} user group
+      group: name={{ user }} state=present
+
+    - name: Create user {{ user }}
+      user: name={{ user }}
+            comment="{{ user }} user"
+            shell=/bin/zsh
+            groups={{ user }},ssh
+
+    - name: Add my public key to {{ user }}
+      authorized_key: user={{ user }}
+                      key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+    ###################
+    # Security
+    ###################
+    - name: Install fail2ban
+      apt: name=fail2ban state=present
+
+    - name: Start fail2ban service
+      service: name=fail2ban state=started enabled=true
+
+    ###################
+    # Tools
+    ###################
+    - name: Install usefull system tools
+      apt: name={{ item }} state=present
+      with_items:
+        - vim
+        - htop
+        - git
+        - nano
+        - zsh
+        - php5
+        - php5-cli
+        - php5-common
+        - php5-curl
+        - php5-gd
+        - php5-intl
+        - php5-json
+        - php5-ldap
+        - php5-mcrypt
+        - php5-mysql
+        - php5-odbc
+        - php5-xsl
+        - libapache2-mod-php5
+        - python-mysqldb
+
+    ###################
+    # Database
+    ###################
+    - name: Create database {{ database_name }}
+      mysql_db: name={{ database_name }} state=present login_user=root login_password={{ mysql_remote_root_password }}
+
+    - name: Create user {{ database_user }} for database {{ database_name }}
+      mysql_user: name={{ database_user }} password={{ mysql_remote_password }} priv={{ database_name }}.*:ALL state=present login_user=root login_password={{ mysql_remote_root_password }}
+
+    ###################
+    # Website
+    ###################
+    - name: Create www directory in {{ user }} home
+      file: path=/home/{{ user }}/www state=directory mode=0755 owner={{ user }} group={{ user }}
+
+    - name: Create vhost
+      template: src=../templates/virtualhost.j2 dest=/etc/apache2/sites-available/{{ user }}.conf force=yes
+      notify:
+      - restart apache
+
+    - name: Enable {{ user }} site
+      command: a2ensite {{ user }}.conf
+
+    - name: Add ssh key to know hosts
+      known_hosts: path='/home/{{ user }}/.ssh/known_hosts'
+                   name='github.com'
+                   key="{{ lookup('pipe', 'ssh-keyscan -t rsa github.com') }}"
+
+    ###################
+    # Oh My Zsh
+    ###################
+    - name: Clone oh-my-zsh repo
+      git: 'repo=https://github.com/robbyrussell/oh-my-zsh.git dest=/home/{{ user }}/.oh-my-zsh'
+
+    - name: Create conf folder in home directory
+      file: path=/home/{{ user }}/conf/ state=directory owner={{ user }}
+
+    - name: Deploy .zshrc
+      template: src=../templates/.zshrc.j2 dest=/home/{{ user }}/conf/zshrc owner={{ user }}
+
+    - name: Remove standard zshrc
+      file: path=/home/{{ user }}/.zshrc state=absent
+
+    - name: Symlink zshrc
+      file: path=/home/{{ user }}/.zshrc src=/home/{{ user }}/conf/zshrc state=link owner={{ user }}
+
+    - name: Set zsh as default shell
+      user: name={{ user }} shell=/bin/zsh
+
+  ###################
+  # Handlers
+  ###################
+  handlers:
+    - name: restart apache
+      service: name=apache2 state=restarted enabled=yes
+

@@ -1,0 +1,24 @@
+<VirtualHost *:{{ http_port }}>
+        ServerAdmin {{ server_admin }}
+        ServerName {{ server_name }}
+        DocumentRoot /home/{{ user }}/www/{{ user }}/current/web
+
+        <Directory /home/{{ user }}/www/{{ user }}/current/web>
+                Options +Indexes  +FollowSymLinks
+                DirectoryIndex app.php
+                AllowOverride All
+                Require all granted
+        </Directory>
+
+        <IfModule mpm_itk_module>
+                AssignUserId {{ user }} www-data
+        </IfModule>
+
+        ErrorLog ${APACHE_LOG_DIR}/{{ user }}-error.log
+
+        # Possible values include: debug, info, notice, warn, error, crit,
+        # alert, emerg.
+        LogLevel warn
+
+        CustomLog ${APACHE_LOG_DIR}/{{ user }}-access.log combined
+</VirtualHost>

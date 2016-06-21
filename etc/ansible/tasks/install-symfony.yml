@@ -1,0 +1,37 @@
+---
+
+- include_vars: ../vars/vars.yml
+
+- name: Create Symfony's parameters.yml
+  template: src=../templates/parameters.yml.j2
+            dest={{ ansistrano_release_path.stdout }}/app/config/parameters.yml
+            force=yes
+            owner={{ user }}
+
+- name: Check for composer.phar
+  stat: path={{symfony_composer_path}}
+  register: composer_file
+
+- name: Run composer self-update
+  shell: '{{symfony_composer_path}} selfupdate --no-interaction'
+  when: composer_file.stat.exists and symfony_composer_self_update
+  register: composer_self_update_result
+  changed_when: composer_self_update_result.stderr | search('Updating')
+
+- name: Install composer
+  get_url: 'url=https://getcomposer.org/composer.phar dest={{symfony_composer_path}} mode=0755 validate_certs=no force=no'
+
+- name: Run composer install
+  shell: chdir={{ansistrano_release_path.stdout}}
+    export SYMFONY_ENV={{symfony_env}} && {{symfony_php_path}} {{symfony_composer_path}} install {{symfony_composer_options}}
+  register: composer_install_result
+  changed_when: composer_install_result.stderr | search('- \w+ing ')
+
+- name: Create database schema
+  shell: '{{ symfony_console }} doctrine:database:create --if-not-exists'
+
+- name: Clear cache
+  shell: '{{ symfony_console }} cache:clear --env={{ symfony_env }}'
+
+- name: Warmup cache
+  shell: '{{ symfony_console }} cache:warmup --env={{ symfony_env }}'
