@@ -2,11 +2,11 @@
 
 namespace AppBundle\Repository;
 
-use Doctrine\ORM\EntityRepository;
+use LAG\AdminBundle\Repository\DoctrineRepository;
 
 /**
  * CustomerRepository
  */
-class CustomerRepository extends EntityRepository
+class CustomerRepository extends DoctrineRepository
 {
 }

@@ -1,8 +1,7 @@
 <?php
 
 namespace AppBundle\Repository;
-
-use LAG\DoctrineRepositoryBundle\Repository\DoctrineRepository;
+use LAG\AdminBundle\Repository\DoctrineRepository;
 
 /**
  * GeorgeRepository

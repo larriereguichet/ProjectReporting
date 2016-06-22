@@ -2,9 +2,11 @@ lag_admin:
     application:
         title: LAG Report
         bootstrap: true
+        # Remove when fixed in admin 0.4.1
         routing:
             url_pattern: /admin/{admin}/{action}
             name_pattern: admin.{admin}.{action}
+        base_template: 'AppBundle::base.html.twig'
 
     menus:
         main:
@@ -21,6 +23,14 @@ lag_admin:
                     admin: profile
                     text: Profiles
                     icon: fa fa-users
+                george:
+                    admin: george
+                    text: Georges
+                    icon: fa fa-tree
+                customer:
+                    admin: customer
+                    text: Clients
+                    icon: fa fa-usd
                 logout:
                     route: logout
                     text: Déconnexion
@@ -29,11 +39,31 @@ lag_admin:
     admins:
         project:
             entity: AppBundle\Entity\Project
-            form: test
+            form: AppBundle\Form\Type\ProjectFormType
             actions: ~
         profile:
             entity: AppBundle\Entity\GeorgeProfile
-            form: test
+            form: AppBundle\Form\Type\GeorgeProfileFormType
+        customer:
+            entity: AppBundle\Entity\Customer
+            form: AppBundle\Form\Type\CustomerFormType
+        george:
+            entity: AppBundle\Entity\George
+            form: AppBundle\Form\Type\GeorgeFormType
+            actions:
+                create: ~
+                edit: ~
+                delete: ~
+                list:
+                    fields:
+                        id: ~
+                        username: ~
+                        email: ~
+                        createdAt:
+                            type: date
+                        rolesAsStringArray:
+                            type: array
+                        _actions: ~
 knp_menu:
     twig:
         template: 'LAGAdminBundle:Menu:bootstrap_menu.html.twig'
