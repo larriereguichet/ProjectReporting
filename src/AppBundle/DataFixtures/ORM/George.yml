@@ -1,0 +1,9 @@
+AppBundle\Entity\George:
+    georges{1..2}:
+        username: <userName()>
+        email: <email()>
+        createdAt: <dateTime()>
+        updatedAt: <dateTime()>
+        roles: ['ROLE_USER', 'ROLE_ADMIN']
+        password: <password()>
+        salt: <password()>

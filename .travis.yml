@@ -1,0 +1,23 @@
+language: php
+
+php:
+    - 5.6
+    - 7.0
+    - hhvm
+
+before_install:
+    - mysql -e "create database IF NOT EXISTS project_reporting_test;"
+    - cp app/config/parameters.yml.dist app/config/parameters.yml
+
+install:
+    - composer install
+    - bin/console doctrine:database:create -n --if-not-exists --env=test
+    - bin/console doctrine:schema:create -n --env=test
+    - bin/console doctrine:fixtures:load -n --event=test
+
+script:
+  - phpunit --coverage-text --coverage-clover=coverage.clover -c app
+
+after_script:
+  - wget https://scrutinizer-ci.com/ocular.phar
+  - php ocular.phar code-coverage:upload --format=php-clover coverage.clover
