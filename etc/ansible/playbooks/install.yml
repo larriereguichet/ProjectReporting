@@ -8,7 +8,7 @@
     # Site
     http_port: 80
     server_admin: afrezet@larriereguichet.fr
-    server_name: http://larriereguichet.fr/
+    server_name: project-reporting.larriereguichet.fr
 
   tasks:
     - include_vars: ../vars/vars.yml
