@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "51960ad5bd4c56515d8faa6438ef9ece",
-    "content-hash": "3f3424b78c11b4e217e08f4850df767e",
+    "hash": "9acbf51f22d3f6793fe97985f5268ae9",
+    "content-hash": "f56672292c81a054d20e12b1b61f19e5",
     "packages": [
         {
             "name": "behat/transliterator",
@@ -1612,16 +1612,16 @@
         },
         {
             "name": "knplabs/knp-menu-bundle",
-            "version": "v2.1.1",
+            "version": "2.1.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/KnpLabs/KnpMenuBundle.git",
-                "reference": "90aff8e39274d1225dfa3bb7b1dd4e47b7312dca"
+                "reference": "42ff1953c3a79d0b31aba2ece8c03fbd70e7f1ca"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/90aff8e39274d1225dfa3bb7b1dd4e47b7312dca",
-                "reference": "90aff8e39274d1225dfa3bb7b1dd4e47b7312dca",
+                "url": "https://api.github.com/repos/KnpLabs/KnpMenuBundle/zipball/42ff1953c3a79d0b31aba2ece8c03fbd70e7f1ca",
+                "reference": "42ff1953c3a79d0b31aba2ece8c03fbd70e7f1ca",
                 "shasum": ""
             },
             "require": {
@@ -1665,21 +1665,21 @@
             "keywords": [
                 "menu"
             ],
-            "time": "2015-12-15 12:06:23"
+            "time": "2016-06-21 06:53:03"
         },
         {
             "name": "lag/adminbundle",
-            "version": "dev-dev",
+            "version": "v0.4",
             "target-dir": "LAG/AdminBundle",
             "source": {
                 "type": "git",
                 "url": "https://github.com/larriereguichet/AdminBundle.git",
-                "reference": "bc96aa0b2b910e0049159067eaf5d07d0bf440a0"
+                "reference": "01610a3239fa50598bb389ba3fdb1a4147da0f28"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/bc96aa0b2b910e0049159067eaf5d07d0bf440a0",
-                "reference": "bc96aa0b2b910e0049159067eaf5d07d0bf440a0",
+                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/01610a3239fa50598bb389ba3fdb1a4147da0f28",
+                "reference": "01610a3239fa50598bb389ba3fdb1a4147da0f28",
                 "shasum": ""
             },
             "require": {
@@ -1740,7 +1740,7 @@
                 "backoffice",
                 "generic"
             ],
-            "time": "2016-06-03 20:52:38"
+            "time": "2016-06-04 21:49:09"
         },
         {
             "name": "lag/array-utils",
@@ -3217,16 +3217,16 @@
     "packages-dev": [
         {
             "name": "sensio/generator-bundle",
-            "version": "v3.0.6",
+            "version": "v3.0.7",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sensiolabs/SensioGeneratorBundle.git",
-                "reference": "ac91535054d025937d897d78ebb5fc2da5e955a4"
+                "reference": "d1be460925376703a470a3ac6ec034eb7eab3892"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/ac91535054d025937d897d78ebb5fc2da5e955a4",
-                "reference": "ac91535054d025937d897d78ebb5fc2da5e955a4",
+                "url": "https://api.github.com/repos/sensiolabs/SensioGeneratorBundle/zipball/d1be460925376703a470a3ac6ec034eb7eab3892",
+                "reference": "d1be460925376703a470a3ac6ec034eb7eab3892",
                 "shasum": ""
             },
             "require": {
@@ -3265,7 +3265,7 @@
                 }
             ],
             "description": "This bundle generates code for you",
-            "time": "2016-02-26 04:36:01"
+            "time": "2016-06-20 05:58:05"
         },
         {
             "name": "symfony/phpunit-bridge",
@@ -3326,8 +3326,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "lag/doctrine-repository": 20,
-        "lag/adminbundle": 20
+        "lag/doctrine-repository": 20
     },
     "prefer-stable": false,
     "prefer-lowest": false,
