@@ -27,8 +27,11 @@
   register: composer_install_result
   changed_when: composer_install_result.stderr | search('- \w+ing ')
 
-- name: Create database schema
+- name: Create database
   shell: '{{ symfony_console }} doctrine:database:create --if-not-exists'
+
+- name: Updating schema
+  shell: '{{ symfony_console }} doctrine:schema:update --force'
 
 - name: Clear cache
   shell: '{{ symfony_console }} cache:clear --env={{ symfony_env }}'
