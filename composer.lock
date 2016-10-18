@@ -1817,12 +1817,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/larriereguichet/AdminBundle.git",
-                "reference": "ee510c765858ff5d498762d051f203d273654db8"
+                "reference": "66876f137a0643dd3f5cb910c4fe3c80074b2648"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/ee510c765858ff5d498762d051f203d273654db8",
-                "reference": "ee510c765858ff5d498762d051f203d273654db8",
+                "url": "https://api.github.com/repos/larriereguichet/AdminBundle/zipball/66876f137a0643dd3f5cb910c4fe3c80074b2648",
+                "reference": "66876f137a0643dd3f5cb910c4fe3c80074b2648",
                 "shasum": ""
             },
             "require": {
@@ -1883,7 +1883,7 @@
                 "backoffice",
                 "generic"
             ],
-            "time": "2016-10-16 20:25:13"
+            "time": "2016-10-18 16:13:54"
         },
         {
             "name": "lag/array-utils",
