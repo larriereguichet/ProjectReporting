@@ -50,6 +50,7 @@ lag_admin:
                     fields:
                         id: ~
                         name: ~
+                        customer: ~
                         _actions:
                             type: collection
                             options:

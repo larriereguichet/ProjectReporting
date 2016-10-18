@@ -10,6 +10,7 @@ project:
 
     id: '#'
     name: Nom
+    customer: Client
     _actions: ''
 
 customer:
@@ -26,9 +27,9 @@ customer:
     _actions: ''
 
 profile:
-    create: Créer un profile
+    create: Créer un profil
     edit: Editer
-    list: Profiles
+    list: Profils
     delete: Supprimer
     saved: Profile sauvegardé
     deleted: Profile supprimé
