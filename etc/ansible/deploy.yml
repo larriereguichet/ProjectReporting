@@ -1,0 +1,71 @@
+---
+- hosts: all
+
+  tasks:
+    - name: Initialize the deploy structure
+      deploy_helper: path={{ deploy_path }}
+
+    - name: Clone the new release ({{ git_version }})
+      git:
+        repo={{ git_repository }}
+        dest={{ deploy_helper.new_release_path }}
+        version={{ git_version }}
+        accept_hostkey=yes
+
+    - name: Add symlinks from the new release to the shared folder
+      file:
+        path='{{ deploy_helper.new_release_path }}/{{ item }}'
+        src='{{ deploy_helper.shared_path }}/{{ item }}'
+        state=link
+        force=yes
+      with_items:
+        - 'logs'
+
+    - name: Add an unfinished file, to allow cleanup on successful finalize
+      file:
+        path={{ deploy_helper.new_release_path }}/{{ deploy_helper.unfinished_filename }}
+        state=touch
+
+    - name: Create Symfony's parameters.yml
+      template:
+        src=../templates/parameters.yml.j2
+        dest={{ deploy_helper.new_release_path }}/app/config/parameters.yml
+        force=yes
+        owner={{ user }}
+
+    - name: Run composer install
+      composer:
+        command=update
+        working_dir={{ deploy_helper.new_release_path }}
+        no_dev=no
+        optimize_autoloader=yes
+
+#    - name: Update database schema (using migrations)
+#      shell: '{{ deploy_helper.new_release_path }}/bin/console doctrine:migrations:migrate --no-interaction --allow-no-migration'
+
+    - name: Clear Symfony's cache
+      command: '{{ deploy_helper.new_release_path }}/bin/console cache:clear --env={{ symfony_env|default("prod") }}'
+
+    - name: Warmup Symfony's cache
+      command: '{{ deploy_helper.new_release_path }}/bin/console cache:warmup --env={{ symfony_env|default("prod") }}'
+
+    - name: Remove development controllers
+      file:
+        path={{ deploy_helper.new_release_path }}/web/{{ item }}
+        state=absent
+      with_items:
+        - app_dev.php
+        - app_test.php
+
+    - name: Finalize the deploy, removing the unfinished file and switching the current symlink to release {{ deploy_helper.new_release }}
+      deploy_helper:
+        path={{ deploy_path }}
+        release={{ deploy_helper.new_release }}
+        state=finalize
+        keep_releases=5
+
+    - name: Ensure {{ user }} owns the deployed files
+      file:
+        path='{{ deploy_path }}'
+        owner='{{ user }}'
+        recurse=yes

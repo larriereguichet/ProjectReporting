@@ -1,9 +1,0 @@
-mysql_remote_root_password: password
-mysql_remote_password: password
-
-# username
-user: username
-
-# mysql username (16 characters max)
-database_name: db_name
-database_user: db_user

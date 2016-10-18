@@ -1,9 +1,9 @@
-<VirtualHost *:{{ http_port }}>
+<VirtualHost *:8080>
         ServerAdmin {{ server_admin }}
         ServerName {{ server_name }}
-        DocumentRoot /home/{{ user }}/www/{{ user }}/current/web
+        DocumentRoot {{ deploy_path }}/current/web
 
-        <Directory /home/{{ user }}/www/{{ user }}/current/web>
+        <Directory {{ deploy_path }}/current/web>
                 Options +Indexes  +FollowSymLinks
                 DirectoryIndex app.php
                 AllowOverride All
