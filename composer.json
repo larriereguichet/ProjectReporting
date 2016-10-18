@@ -32,7 +32,8 @@
     "gedmo/doctrine-extensions": "^2.4",
     "lag/doctrine-repository": "dev-master",
     "lag/adminbundle": "^0.4",
-    "friendsofphp/php-cs-fixer": "^1.11"
+    "friendsofphp/php-cs-fixer": "^1.11",
+    "doctrine/doctrine-migrations-bundle": "^1.2"
   },
   "require-dev": {
     "sensio/generator-bundle": "^3.0",
