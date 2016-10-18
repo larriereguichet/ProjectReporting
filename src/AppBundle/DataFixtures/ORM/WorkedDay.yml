@@ -1,0 +1,5 @@
+AppBundle\Entity\WorkedDay:
+    worked_days{1..200}:
+        profile: '@george_profiles*'
+        date: <dateTimeBetween('-30 months', 'now')>
+        duration: <randomElement([0.5, 1])>

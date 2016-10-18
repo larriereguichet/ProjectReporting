@@ -1,0 +1,6 @@
+AppBundle\Entity\Customer:
+    customers{1..20}:
+        name: <company()>
+        contactEmail: <email()>
+        createdAt: <dateTime()>
+        updatedAt: <dateTime()>

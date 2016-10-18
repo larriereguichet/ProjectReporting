@@ -1,0 +1,6 @@
+AppBundle\Entity\Project:
+    projects{1..30}:
+        customer: '@customer*'
+        name: <sentence(3)>
+        createdAt: <dateTime()>
+        updatedAt: <dateTime()>

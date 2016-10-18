@@ -1,0 +1,7 @@
+AppBundle\Entity\GeorgeProfile:
+    george_profiles{1..2}:
+        george: '@georges*'
+        project: '@projects*'
+        name: <sentence()>
+        dailyRate: <randomElement([320, 450, 500, 420, 400])>
+        numberOfDays: <randomDigitNotNull()>
