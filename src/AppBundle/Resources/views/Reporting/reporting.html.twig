@@ -5,6 +5,11 @@
     {% set now = date() %}
     {% set displayNextLink = (nextDate < now) %}
 
+    {% if period.startDate.format('m') != now.format('m') %}
+        <a href="{{ path('app_reporting', {year: now.format('Y'), month: now.format('m')}) }}"
+        >Aller au mois de {{ now.format('M') ~ ' ' ~ now.format('Y') }}</a>
+    {% endif %}
+
     <div id="reporting" class="panel panel-default">
         <div class="panel-heading">
             <a href="{{ previousLink }}" class="left">
@@ -38,7 +43,10 @@
                     <td></td>
 
                     {% for day in period.getDatePeriod('1 DAY') %}
-                        <th class="header-days">
+                        {% set isWeekEndDay = day.format('N') in [6,7] %}
+                        {% set isToday = day.format('d/m/Y') == now.format('d/m/Y') %}
+
+                        <th class="header-days{{ isWeekEndDay ? ' week-end' : '' }}{% if isToday %} today{% endif %}">
                             {{ day | localizeddate('none', 'none', null, null, 'EEE') }}<br/>
                             {{ day | localizeddate('none', 'none', null, null, 'dd') }}
                         </th>
@@ -52,7 +60,12 @@
                                 {{ profile.name }} ({{ project.name }})
                             </td>
                             {% for day in period.getDatePeriod('1 DAY') %}
-                                <td class="worked-days">
+                                {% set isWeekEndDay = day.format('N') in [6,7] %}
+                                {% set isToday = day.format('d/m/Y') == now.format('d/m/Y') %}
+                                {% set data = forms[profile.id][day.format('d')].vars.data %}
+                                {% set shouldBeFilled = day < now and data.duration == 0 and not isWeekEndDay and not isToday %}
+
+                                <td class="worked-days{% if shouldBeFilled %} red-days{% endif %}{% if isWeekEndDay %} week-end{% endif %}{% if isToday %} today{% endif %}">
                                     {{ form_widget(forms[profile.id][day.format('d')]) }}
                                 </td>
                             {% endfor %}
@@ -94,6 +107,12 @@
         #reporting table .red-days {
             background-color: #ffa19c;
         }
+        #reporting table .week-end {
+            background-color: lightgrey;
+        }
+        #reporting table .today {
+            background-color: lightyellow;
+        }
 
         .right {
             float: right;
@@ -129,6 +148,9 @@
                     data: reportingForm.serialize(),
                     error: function () {
                         input.val(currentValue);
+                    },
+                    success: function () {
+                        validate();
                     }
                 });
             });
@@ -156,7 +178,7 @@
                     var value = $(input).val();
 
                     if (value > 1) {
-                        redDays.push(index);
+                        //redDays.push(index);
                     }
                 });
 

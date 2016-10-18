@@ -94,7 +94,6 @@ class ReportingHelper
 
     /**
      * @param Request $request
-     * @return array
      */
     public function handleRequest(Request $request)
     {

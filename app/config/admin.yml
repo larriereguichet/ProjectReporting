@@ -6,6 +6,8 @@ lag_admin:
         routing:
             url_pattern: /admin/{admin}/{action}
             name_pattern: admin.{admin}.{action}
+        translation:
+            enabled: true
         base_template: 'AppBundle::base.html.twig'
 
     menus:
@@ -40,13 +42,117 @@ lag_admin:
         project:
             entity: AppBundle\Entity\Project
             form: AppBundle\Form\Type\ProjectFormType
-            actions: ~
+            actions:
+                create: ~
+                edit: ~
+                delete: ~
+                list:
+                    fields:
+                        id: ~
+                        name: ~
+                        _actions:
+                            type: collection
+                            options:
+                                _edit:
+                                    type: action
+                                    options:
+                                        title: project.edit
+                                        route: admin.project.edit
+                                        parameters: {id: ~}
+                                        icon: pencil
+                                _delete:
+                                    type: action
+                                    options:
+                                        title: project.delete
+                                        route: admin.project.delete
+                                        parameters: {id: ~}
+                                        icon: remove
+                    menus:
+                        top:
+                            items:
+                                add:
+                                    text: project.create
+                                    admin: project
+                                    action: create
+                                    icon: fa fa-plus
+
         profile:
             entity: AppBundle\Entity\GeorgeProfile
             form: AppBundle\Form\Type\GeorgeProfileFormType
+            actions:
+                create: ~
+                edit: ~
+                delete: ~
+                list:
+                    fields:
+                        id: ~
+                        name: ~
+                        project: ~
+                        george: ~
+                        dailyRate: ~
+                        numberOfDays: ~
+                        _actions:
+                            type: collection
+                            options:
+                                _edit:
+                                    type: action
+                                    options:
+                                        title: profile.edit
+                                        route: admin.profile.edit
+                                        parameters: {id: ~}
+                                        icon: pencil
+                                _delete:
+                                    type: action
+                                    options:
+                                        title: profile.delete
+                                        route: admin.profile.delete
+                                        parameters: {id: ~}
+                                        icon: remove
+                    menus:
+                        top:
+                            items:
+                                add:
+                                    text: profile.create
+                                    admin: profile
+                                    action: create
+                                    icon: fa fa-plus
         customer:
             entity: AppBundle\Entity\Customer
             form: AppBundle\Form\Type\CustomerFormType
+            actions:
+                create: ~
+                edit: ~
+                delete: ~
+                list:
+                    fields:
+                        id: ~
+                        name: ~
+                        contactEmail: ~
+                        _actions:
+                            type: collection
+                            options:
+                                _edit:
+                                    type: action
+                                    options:
+                                        title: customer.edit
+                                        route: admin.customer.edit
+                                        parameters: {id: ~}
+                                        icon: pencil
+                                _delete:
+                                    type: action
+                                    options:
+                                        title: customer.delete
+                                        route: admin.customer.delete
+                                        parameters: {id: ~}
+                                        icon: remove
+                    menus:
+                        top:
+                            items:
+                                add:
+                                    text: customer.create
+                                    admin: customer
+                                    action: create
+                                    icon: fa fa-plus
         george:
             entity: AppBundle\Entity\George
             form: AppBundle\Form\Type\GeorgeFormType
@@ -63,7 +169,32 @@ lag_admin:
                             type: date
                         rolesAsStringArray:
                             type: array
-                        _actions: ~
+                        _actions:
+                            type: collection
+                            options:
+                                _edit:
+                                    type: action
+                                    options:
+                                        title: george.edit
+                                        route: admin.george.edit
+                                        parameters: {id: ~}
+                                        icon: pencil
+                                _delete:
+                                    type: action
+                                    options:
+                                        title: george.delete
+                                        route: admin.george.delete
+                                        parameters: {id: ~}
+                                        icon: remove
+                    menus:
+                        top:
+                            items:
+                                add:
+                                    text: george.create
+                                    admin: george
+                                    action: create
+                                    icon: fa fa-plus
+
 knp_menu:
     twig:
         template: 'LAGAdminBundle:Menu:bootstrap_menu.html.twig'

@@ -3,6 +3,7 @@
 namespace AppBundle\Form\Type;
 
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\FormBuilderInterface;
 
 class CustomerFormType extends AbstractType
@@ -15,9 +16,12 @@ class CustomerFormType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('contactEmail')
+            ->add('contactEmail', EmailType::class, [
+                'required' => false
+            ])
             ->add('projects', null, [
-                'expanded' => true
+                'expanded' => true,
+                'required' => false
             ])
         ;
     }

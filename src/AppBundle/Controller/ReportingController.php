@@ -12,7 +12,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Intl\DateFormatter\IntlDateFormatter;
 
 class ReportingController extends Controller
 {

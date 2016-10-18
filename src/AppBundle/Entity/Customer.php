@@ -28,7 +28,7 @@ class Customer
     protected $name;
 
     /**
-     * @ORM\Column(name="contact_email", type="string", length=255)
+     * @ORM\Column(name="contact_email", type="string", length=255, nullable=true)
      * @var string
      */
     protected $contactEmail;

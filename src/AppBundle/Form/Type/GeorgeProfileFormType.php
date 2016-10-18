@@ -11,7 +11,6 @@ class GeorgeProfileFormType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('george')
             ->add('project')
             ->add('dailyRate')
             ->add('numberOfDays')

@@ -1,1 +1,58 @@
 login: Se Connecter
+
+project:
+    create: Créer un projet
+    edit: Editer
+    list: Projets
+    delete: Supprimer
+    saved: Projet sauvegardé
+    deleted: Projet supprimé
+
+    id: '#'
+    name: Nom
+    _actions: ''
+
+customer:
+    create: Créer un client
+    edit: Editer
+    list: Clients
+    delete: Supprimer
+    saved: Client sauvegardé
+    deleted: Client supprimé
+
+    id: '#'
+    name: Nom
+    contactEmail: Email du contact
+    _actions: ''
+
+profile:
+    create: Créer un profile
+    edit: Editer
+    list: Profiles
+    delete: Supprimer
+    saved: Profile sauvegardé
+    deleted: Profile supprimé
+
+    id: '#'
+    name: Nom
+    project: Projet
+    george: George
+    dailyRate: Prix journalier
+    numberOfDays: Nombre de jours vendus
+    _actions: ''
+
+george:
+    create: Créer un George
+    edit: Editer
+    list: Georges
+    delete: Supprimer
+    saved: George sauvegardé
+    deleted: George supprimé
+
+    id: '#'
+    name: Nom
+    username: "Nom d'utilisateur"
+    email: email
+    createdAt: Créé le
+    rolesAsStringArray: Rôles
+    _actions: ''
