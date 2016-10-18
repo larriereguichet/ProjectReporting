@@ -1,0 +1,22 @@
+---
+# server vars
+ansible_host: ~
+ansible_user: ~
+ansible_port: ~
+user: ~
+
+# database vars
+database_name: ~
+database_user: ~
+database_password: ~
+database_root_password: ~
+
+# apache vars
+server_admin: ~
+server_name: ~
+
+# project vars
+deploy_path: ~
+git_version: ~
+git_host: ~
+git_repository: ~
