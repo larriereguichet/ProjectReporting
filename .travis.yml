@@ -16,7 +16,7 @@ install:
     - bin/console doctrine:fixtures:load -n --env=test
 
 script:
-  - phpunit --coverage-text --coverage-clover=coverage.clover -c app
+  - phpunit --coverage-text --coverage-clover=coverage.clover
 
 after_script:
   - wget https://scrutinizer-ci.com/ocular.phar
